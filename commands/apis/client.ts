@@ -37,6 +37,16 @@ class SwitchBotAPIClient {
     });
     return response.json();
   }
+
+  public async getDeviceStatus(deviceId: string) {
+    const endpoint = `${this.baseURL}/devices/${deviceId}/status`;
+    const authorizationHeaders = this.createAuthorizationHeaders();
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: authorizationHeaders,
+    });
+    return response.json();
+  }
 }
 
 export const newAPIClient = () => {

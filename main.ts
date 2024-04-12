@@ -1,6 +1,6 @@
 import { Command } from "./deps.ts";
 
-import { listDevices } from "./commands/device.ts";
+import { getDeviceStatus, listDevices } from "./commands/device.ts";
 
 await new Command()
   .name("switchbot")
@@ -12,6 +12,15 @@ await new Command()
       .description("List devices")
       .action(async () => {
         await listDevices();
+      }),
+  )
+  .command(
+    "status",
+    new Command()
+      .description("Get device status")
+      .arguments("<deviceId:string>")
+      .action(async (_, deviceId) => {
+        await getDeviceStatus(deviceId);
       }),
   )
   .parse(Deno.args);
