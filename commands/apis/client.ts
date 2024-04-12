@@ -1,5 +1,6 @@
 import { Buffer, crypto } from "../../deps.ts";
 import { getCredential } from "../../env.ts";
+import { newErrorResponse } from "./error.ts";
 
 const defaultBaseURL = "https://api.switch-bot.com/v1.1";
 
@@ -34,8 +35,14 @@ class SwitchBotAPIClient {
     const response = await fetch(endpoint, {
       method: "GET",
       headers: authorizationHeaders,
-    });
-    return response.json();
+    }).then((res) => res.json());
+
+    const error = newErrorResponse(response);
+    if (error) {
+      throw error;
+    }
+
+    return response.body;
   }
 
   public async getDeviceStatus(deviceId: string) {
@@ -44,8 +51,14 @@ class SwitchBotAPIClient {
     const response = await fetch(endpoint, {
       method: "GET",
       headers: authorizationHeaders,
-    });
-    return response.json();
+    }).then((res) => res.json());
+
+    const error = newErrorResponse(response);
+    if (error) {
+      throw error;
+    }
+
+    return response.body;
   }
 }
 
