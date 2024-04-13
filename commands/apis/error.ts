@@ -1,18 +1,25 @@
 // See: https://github.com/OpenWonderLabs/SwitchBotAPI?tab=readme-ov-file#errors
-export const newErrorResponse = (response: unknown): Error | void => {
+export const newErrorResponse = (
+  code: number,
+  message: string,
+  body: unknown,
+): Error | void => {
+  if (code < 200 || code >= 300) {
+    return new Error(`unexpected status code: ${code}, ${message}`);
+  }
   if (
-    !response || typeof response !== "object" || !("statusCode" in response) ||
-    !("message" in response)
+    !body || typeof body !== "object" || !("statusCode" in body) ||
+    !("message" in body)
   ) {
-    return new Error("invalid response");
+    return new Error("invalid response body");
   }
 
-  switch (response.statusCode) {
+  switch (body.statusCode) {
     case 100:
       return;
     default:
       return new Error(
-        `unexpected status code: ${response.statusCode}, message: ${response.message}`,
+        `unexpected status code: ${body.statusCode}, message: ${body.message}`,
       );
   }
 };

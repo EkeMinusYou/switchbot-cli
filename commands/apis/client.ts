@@ -29,36 +29,34 @@ class SwitchBotAPIClient {
     };
   }
 
-  public async listDevices() {
-    const endpoint = `${this.baseURL}/devices`;
+  private async GET(endpoint: string) {
     const authorizationHeaders = this.createAuthorizationHeaders();
-    const response = await fetch(endpoint, {
+
+    const { code, message, body } = await fetch(endpoint, {
       method: "GET",
       headers: authorizationHeaders,
-    }).then((res) => res.json());
+    }).then(async (res) => {
+      return {
+        code: res.status,
+        message: res.statusText,
+        body: await res.json(),
+      };
+    });
 
-    const error = newErrorResponse(response);
+    const error = newErrorResponse(code, message, body);
     if (error) {
       throw error;
     }
 
-    return response.body;
+    return body.body;
   }
 
-  public async getDeviceStatus(deviceId: string) {
-    const endpoint = `${this.baseURL}/devices/${deviceId}/status`;
-    const authorizationHeaders = this.createAuthorizationHeaders();
-    const response = await fetch(endpoint, {
-      method: "GET",
-      headers: authorizationHeaders,
-    }).then((res) => res.json());
+  public listDevices() {
+    return this.GET(`${this.baseURL}/devices`);
+  }
 
-    const error = newErrorResponse(response);
-    if (error) {
-      throw error;
-    }
-
-    return response.body;
+  public getDeviceStatus(deviceId: string) {
+    return this.GET(`${this.baseURL}/devices/${deviceId}/status`);
   }
 }
 
