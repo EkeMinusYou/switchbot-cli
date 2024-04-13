@@ -1,6 +1,7 @@
 import { Buffer, crypto } from "../../deps.ts";
 import { getCredential } from "../../env.ts";
 import { newErrorResponse } from "./error.ts";
+import { ListDevicesResponse } from "./types.ts";
 
 const defaultBaseURL = "https://api.switch-bot.com/v1.1";
 
@@ -29,7 +30,7 @@ class SwitchBotAPIClient {
     };
   }
 
-  private async GET(endpoint: string) {
+  private async GET<T>(endpoint: string): Promise<T> {
     const authorizationHeaders = this.createAuthorizationHeaders();
 
     const { code, message, body } = await fetch(endpoint, {
@@ -51,8 +52,8 @@ class SwitchBotAPIClient {
     return body.body;
   }
 
-  public listDevices() {
-    return this.GET(`${this.baseURL}/devices`);
+  public listDevices(): Promise<ListDevicesResponse> {
+    return this.GET<ListDevicesResponse>(`${this.baseURL}/devices`);
   }
 
   public getDeviceStatus(deviceId: string) {
