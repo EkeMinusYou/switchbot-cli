@@ -28,3 +28,23 @@ export const getDeviceStatus = async (deviceId: string) => {
   const result = await APIClient.getDeviceStatus(deviceId);
   console.log(result);
 };
+
+const commamdMap = {
+  turnon: "turnOn",
+  turnoff: "turnOff",
+};
+
+export const sendCommand = async (
+  deviceId: string,
+  command: "turnon" | "turnoff",
+) => {
+  const APIClient = newAPIClient();
+  const body = {
+    commandType: "command",
+    command: commamdMap[command],
+    parameter: "default",
+  } as const;
+
+  const result = await APIClient.sendCommand(deviceId, body);
+  console.log(result);
+};

@@ -1,10 +1,12 @@
 import { ansi, Command } from "./deps.ts";
 
-import { getDeviceStatus, listDevices } from "./commands/device.ts";
+import {
+  getDeviceStatus,
+  listDevices,
+  sendCommand,
+} from "./commands/device.ts";
 
 const error = ansi.colors.bold.red;
-// const warn = ansi.colors.bold.yellow;
-// const info = ansi.colors.bold.blue;
 
 await new Command()
   .name("switchbot")
@@ -31,6 +33,18 @@ await new Command()
           .arguments("<deviceId:string>")
           .action(async (_, deviceId) => {
             await getDeviceStatus(deviceId).catch((e) => {
+              console.log(error(e.message));
+              Deno.exit(1);
+            });
+          }),
+      )
+      .command(
+        "send-command",
+        new Command()
+          .description("Send command to device")
+          .arguments("<deviceId:string> <command:string>")
+          .action(async (_, deviceId, command) => {
+            await sendCommand(deviceId, command).catch((e) => {
               console.log(error(e.message));
               Deno.exit(1);
             });

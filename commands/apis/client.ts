@@ -52,12 +52,50 @@ class SwitchBotAPIClient {
     return body.body;
   }
 
+  private async POST<T>(
+    endpoint: string,
+    body: Record<string, unknown>,
+  ): Promise<T> {
+    const authorizationHeaders = this.createAuthorizationHeaders();
+
+    const { code, message, body: responseBody } = await fetch(endpoint, {
+      method: "POST",
+      headers: authorizationHeaders,
+      body: JSON.stringify(body),
+    }).then(async (res) => {
+      return {
+        code: res.status,
+        message: res.statusText,
+        body: await res.json(),
+      };
+    });
+
+    const error = newErrorResponse(code, message, responseBody);
+    if (error) {
+      throw error;
+    }
+
+    return responseBody.body;
+  }
+
   public listDevices(): Promise<ListDevicesResponse> {
     return this.GET<ListDevicesResponse>(`${this.baseURL}/devices`);
   }
 
   public getDeviceStatus(deviceId: string) {
     return this.GET(`${this.baseURL}/devices/${deviceId}/status`);
+  }
+
+  public async sendCommand(
+    deviceId: string,
+    params: {
+      commandType: "command";
+      command: string;
+      parameter: string | Record<string, string>;
+    },
+  ) {
+    await this.POST(`${this.baseURL}/devices/${deviceId}/commands`, params);
+    return;
   }
 }
 
