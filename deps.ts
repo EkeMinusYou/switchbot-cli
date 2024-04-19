@@ -1,5 +1,4 @@
 export { Buffer } from "https://deno.land/std@0.136.0/node/buffer.ts";
-export * as dotenv from "https://deno.land/std@0.222.1/dotenv/mod.ts";
 export * as crypto from "https://deno.land/std@0.166.0/node/crypto.ts";
 export {
   Command,

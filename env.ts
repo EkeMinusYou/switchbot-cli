@@ -1,9 +1,3 @@
-import { dotenv } from "./deps.ts";
-
-await dotenv.load({
-  export: true,
-});
-
 export const getCredential = () => {
   const token = Deno.env.get("SWITCHBOT_API_TOKEN");
   const secret = Deno.env.get("SWITCHBOT_API_SECRET");
