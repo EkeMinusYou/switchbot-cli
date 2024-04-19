@@ -1,9 +1,8 @@
 import { Table } from "../deps.ts";
-import { newAPIClient } from "./apis/client.ts";
+import * as api from "./api/api.ts";
 
 export const listDevices = async () => {
-  const APIClient = newAPIClient();
-  const result = await APIClient.listDevices();
+  const result = await api.listDevices();
 
   const table = new Table().padding(3);
   table.header([
@@ -24,27 +23,21 @@ export const listDevices = async () => {
 };
 
 export const getDeviceStatus = async (deviceId: string) => {
-  const APIClient = newAPIClient();
-  const result = await APIClient.getDeviceStatus(deviceId);
+  const result = await api.getDeviceStatus(deviceId);
   console.log(result);
 };
 
-const commamdMap = {
-  turnon: "turnOn",
-  turnoff: "turnOff",
-};
-
+export const commands = ["turnon", "turnoff"] as const;
 export const sendCommand = async (
   deviceId: string,
-  command: "turnon" | "turnoff",
+  command: typeof commands[number],
 ) => {
-  const APIClient = newAPIClient();
   const body = {
     commandType: "command",
-    command: commamdMap[command],
+    command: command,
     parameter: "default",
   } as const;
 
-  const result = await APIClient.sendCommand(deviceId, body);
+  const result = await api.sendCommand(deviceId, body);
   console.log(result);
 };

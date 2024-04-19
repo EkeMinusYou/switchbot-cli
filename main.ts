@@ -1,6 +1,7 @@
-import { ansi, Command } from "./deps.ts";
+import { ansi, Command, EnumType } from "./deps.ts";
 
 import {
+  commands,
   getDeviceStatus,
   listDevices,
   sendCommand,
@@ -42,7 +43,8 @@ await new Command()
         "send-command",
         new Command()
           .description("Send command to device")
-          .arguments("<deviceId:string> <command:string>")
+          .type("command", new EnumType(commands))
+          .arguments("<deviceId:string> <command:command>")
           .action(async (_, deviceId, command) => {
             await sendCommand(deviceId, command).catch((e) => {
               console.log(error(e.message));
