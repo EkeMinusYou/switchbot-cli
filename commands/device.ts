@@ -27,22 +27,34 @@ export const getDeviceStatus = async (deviceId: string) => {
   console.log(result);
 };
 
-const commandMap = {
-  turnon: "turnOn",
-  turnoff: "turnOff",
-} as const;
 export const commands = ["turnon", "turnoff"] as const;
 
 export const sendCommand = async (
   deviceId: string,
   command: typeof commands[number],
 ) => {
-  const body = {
-    commandType: "command",
-    command: commandMap[command],
-    parameter: "default",
-  } as const;
+  switch (command) {
+    case "turnon": {
+      const body = {
+        commandType: "command",
+        command: "turnOn",
+        parameter: "default",
+      } as const;
 
-  const result = await api.sendCommand(deviceId, body);
-  console.log(result);
+      await api.sendCommand(deviceId, body);
+      console.log(`device ${deviceId} is turned on`);
+      return;
+    }
+    case "turnoff": {
+      const body = {
+        commandType: "command",
+        command: "turnOff",
+        parameter: "default",
+      } as const;
+
+      await api.sendCommand(deviceId, body);
+      console.log(`device ${deviceId} is turned off`);
+      return;
+    }
+  }
 };
