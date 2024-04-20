@@ -1,4 +1,4 @@
-import { ansi, Command, EnumType } from "./deps.ts";
+import { ansi, Command, CompletionsCommand, EnumType } from "./deps.ts";
 
 import {
   commands,
@@ -13,6 +13,7 @@ await new Command()
   .name("switchbot")
   .version("0.0.1")
   .description("Command line tool for SwitchBot API")
+  .command("completions", new CompletionsCommand())
   .command(
     "device",
     new Command().description("Device commands")
