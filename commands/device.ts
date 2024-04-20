@@ -27,14 +27,19 @@ export const getDeviceStatus = async (deviceId: string) => {
   console.log(result);
 };
 
+const commandMap = {
+  turnon: "turnOn",
+  turnoff: "turnOff",
+} as const;
 export const commands = ["turnon", "turnoff"] as const;
+
 export const sendCommand = async (
   deviceId: string,
   command: typeof commands[number],
 ) => {
   const body = {
     commandType: "command",
-    command: command,
+    command: commandMap[command],
     parameter: "default",
   } as const;
 

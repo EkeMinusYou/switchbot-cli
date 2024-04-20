@@ -17,6 +17,5 @@ export const sendCommand = async (
     parameter: string | Record<string, string>;
   },
 ) => {
-  await POST(`${getBaseURL()}/devices/${deviceId}/commands`, params);
-  return;
+  return await POST(`${getBaseURL()}/devices/${deviceId}/commands`, params);
 };
