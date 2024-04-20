@@ -9,7 +9,7 @@ Simple Command line tool for SwitchBot Devices
 ## Installation
 
 ```shell
-deno install -n switchbot -fg --allow-env --allow-net https://raw.githubusercontent.com/EkeMinusYou/switchbot-cli/main/switchbot.ts
+deno install --name switchbot -fgr --allow-env --allow-net https://raw.githubusercontent.com/EkeMinusYou/switchbot-cli/main/switchbot.ts
 ```
 
 ## Usage
@@ -27,4 +27,10 @@ switchbot device list
 switchbot device status <deviceId>
 switchbot device command <deviceId> turnon
 switchbot device command <deviceId> turnoff
+```
+
+## Shell Completion
+
+```
+source <(switchbot completions <bash|zsh|fish>)
 ```
